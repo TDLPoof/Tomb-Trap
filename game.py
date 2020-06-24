@@ -9,6 +9,19 @@ import config
 import pygame
 import math
 
+def hasBlackTiles(map):
+        for row in map:
+            if row.count("B") != 0:
+                return True
+        return False
+
+def openDoor(map):
+    for i in range(len(map)):
+        for j in range(len(map[i])):
+            if map[i][j] == "D":
+                map[i][j] = "S"
+                return
+
 class Game:
     def __init__(self, screen):
         self.screen = screen
@@ -22,20 +35,23 @@ class Game:
         self.player = player
         self.objects.append(player)
         self.game_state = GameState.RUNNING
-        self.load_map("01")
-    
+        self.load_map("03")
+
     def update(self):
         #clear screen first
         self.screen.fill(config.GREEN)
         #print("update")
         #handle all events related to the object
         self.handle_events()
-        
+
         self.render_map(self.screen)
         
         #every object in objects should have a render function
         for object in self.objects:
             object.render(self.screen, self.camera)
+
+        if not hasBlackTiles(self.map):
+            openDoor(self.map)
     
     def handle_events(self):
         for event in pygame.event.get():
@@ -79,9 +95,16 @@ class Game:
             return
         if new_position[1] < 0 or new_position[1] > (len(self.map) - 1):
             return
-        if self.map[new_position[1]][new_position[0]] == "W": #collision with wall
+        if self.map[new_position[1]][new_position[0]] == "W":
             return
-        
+        if self.map[new_position[1]][new_position[0]] == "D":
+            return
+        if self.map[new_position[1]][new_position[0]] == "B":
+            self.map[new_position[1]][new_position[0]] = "X" #swap b for w
+        elif self.map[new_position[1]][new_position[0]] == "X":
+            self.map[new_position[1]][new_position[0]] = "B" #swap w for b
+        if self.map.count("B") == 0:
+            self.map[13][12] = "S"
         unit.update_position(new_position)
     
     def determine_camera(self):
