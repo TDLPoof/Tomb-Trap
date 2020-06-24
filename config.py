@@ -16,5 +16,6 @@ SCREEN_HEIGHT = 640
 
 map_tile_image = {
     "S" : pygame.transform.scale(pygame.image.load("sprites/Sand.png"), (SCALE, SCALE)),
-    "W": pygame.transform.scale(pygame.image.load("sprites/Wall.png"), (SCALE, SCALE))
+    "W": pygame.transform.scale(pygame.image.load("sprites/Wall.png"), (SCALE, SCALE)),
+    "B": pygame.transform.scale(pygame.image.load("sprites/Black Tile.png"), (SCALE, SCALE)),
 }
