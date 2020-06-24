@@ -18,4 +18,6 @@ map_tile_image = {
     "S" : pygame.transform.scale(pygame.image.load("sprites/Sand.png"), (SCALE, SCALE)),
     "W": pygame.transform.scale(pygame.image.load("sprites/Wall.png"), (SCALE, SCALE)),
     "B": pygame.transform.scale(pygame.image.load("sprites/Black Tile.png"), (SCALE, SCALE)),
+    "X": pygame.transform.scale(pygame.image.load("sprites/White Tile.png"), (SCALE, SCALE)),
+    "D": pygame.transform.scale(pygame.image.load("sprites/Door.png"), (SCALE, SCALE)),
 }
