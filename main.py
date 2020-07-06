@@ -13,7 +13,7 @@ from game import Game
 pygame.mixer.music.load("audio/bgMusic.wav")
 pygame.mixer.music.play(-1)
 
-def main(width = 640, height = 640, frameRate = 50):
+def main(width = 2000, height = 2000, frameRate = 60):
     pygame.init()
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Puzzle Game")

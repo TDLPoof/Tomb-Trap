@@ -16,6 +16,9 @@ class Player:
         self.rect = pygame.Rect(self.position[0] * scl, self.position[1] * scl,
                                                 scl, scl)
         
+    def change_sprite(self, image):
+        self.image = pygame.image.load(image)
+
     def update(self):
         print("Player updated")
         
