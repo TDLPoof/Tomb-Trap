@@ -25,4 +25,5 @@ map_tile_image = {
     "E": pygame.transform.scale(pygame.image.load("sprites/Exit.png"), (SCALE, SCALE)), 
     "C": pygame.transform.scale(pygame.image.load("sprites/Cracked Tile.png"), (SCALE, SCALE)),
     "H": pygame.transform.scale(pygame.image.load("sprites/Hole.png"), (SCALE, SCALE)),
+    "_": pygame.transform.scale(pygame.image.load("sprites/Black.png"), (SCALE, SCALE)),
 }
