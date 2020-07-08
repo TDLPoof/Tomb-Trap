@@ -9,3 +9,7 @@ I = Ice (unused)
 J = Jump Tile
 C = Cracked Tile
 H = Hole (pretty much wall)
+
+
+
+DO NOT PRESS R OR C
