@@ -12,6 +12,7 @@ import time
 
 pygame.mixer.init()
 
+jumpSound = pygame.mixer.Sound("audio/jumpTile.wav")
 doorOpen = pygame.mixer.Sound("audio/doorOpen.wav")
 winSound = pygame.mixer.Sound("audio/youWin.wav")
 tileSwitch = pygame.mixer.Sound("audio/tileFlip.wav")
@@ -29,7 +30,6 @@ def openDoor(map):
             if map[i][j] == "D":
                 map[i][j] = "E"
                 pygame.mixer.Sound.play(doorOpen)
-                pygame.mixer.music.stop()
                 return
 
 class Game:
@@ -38,14 +38,17 @@ class Game:
         self.objects = []
         self.map = []
         self.game_state = GameState.NONE
+        self.lvl = 1
         self.camera = [0, 0]
         
-    def set_up(self):
+    def set_up(self, lvl):
+        pygame.mixer.music.load("audio/bgMusic.wav")
+        pygame.mixer.music.play(-1)
         player = Player(1, 1)
         self.player = player
         self.objects.append(player)
         self.game_state = GameState.RUNNING
-        self.load_map("05")
+        self.load_map(f"LV{lvl}")
 
     def update(self):
         #clear screen first
@@ -84,8 +87,11 @@ class Game:
                     self.move_unit(self.player, [1, 0])
                 if event.key == pygame.K_c:
                     openDoor(self.map)
+                if event.key == pygame.K_r:
+                    self.set_up(self.lvl)
     
     def load_map(self, file_name):
+        self.map = []
         with open('maps/' + file_name + ".txt") as map_file:
             for line in map_file:
                 tiles = []
@@ -114,6 +120,8 @@ class Game:
             return
         if self.map[new_position[1]][new_position[0]] == "W":
             return
+        if self.map[new_position[1]][new_position[0]] == "_":
+            return
         if self.map[new_position[1]][new_position[0]] == "H":
             return
         if self.map[new_position[1]][new_position[0]] == "D":
@@ -130,10 +138,12 @@ class Game:
             self.map[new_position[1]][new_position[0]] = "H"
             pygame.mixer.Sound.play(tileBreak)
         if self.map[new_position[1]][new_position[0]] == "E":
+            pygame.mixer.music.stop()
             pygame.mixer.Sound.play(winSound)
             time.sleep(5)
-            print("Yoo wan!")
-            self.game_state = GameState.ENDED
+            self.lvl += 1
+            self.set_up(self.lvl)
+            
         if useJump:
             new_position[0] += position_change[0] * 2
             new_position[1] += position_change[1] * 2
@@ -141,8 +151,11 @@ class Game:
                 return
             if self.map[new_position[1]][new_position[0]] == "D":
                 return
+            if self.map[new_position[1]][new_position[0]] == "_":
+                return
             if new_position[0] < 0 or new_position[1] < 0:
                 return
+            pygame.mixer.Sound.play(jumpSound)
         unit.update_position(new_position)
     
     def determine_camera(self):
