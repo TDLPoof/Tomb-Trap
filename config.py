@@ -15,7 +15,7 @@ SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 
 map_tile_image = {
-    "S" : pygame.transform.scale(pygame.image.load("sprites/Sand.png"), (SCALE, SCALE)),
+    "S": pygame.transform.scale(pygame.image.load("sprites/Sand.png"), (SCALE, SCALE)),
     "W": pygame.transform.scale(pygame.image.load("sprites/Wall.png"), (SCALE, SCALE)),
     "B": pygame.transform.scale(pygame.image.load("sprites/Black Tile.png"), (SCALE, SCALE)),
     "X": pygame.transform.scale(pygame.image.load("sprites/White Tile.png"), (SCALE, SCALE)),
@@ -26,4 +26,12 @@ map_tile_image = {
     "C": pygame.transform.scale(pygame.image.load("sprites/Cracked Tile.png"), (SCALE, SCALE)),
     "H": pygame.transform.scale(pygame.image.load("sprites/Hole.png"), (SCALE, SCALE)),
     "_": pygame.transform.scale(pygame.image.load("sprites/Black.png"), (SCALE, SCALE)),
+    "|": pygame.transform.scale(pygame.image.load("sprites/Camo.png"), (SCALE, SCALE)),
+    "R": pygame.transform.scale(pygame.image.load("sprites/Red Door.png"), (SCALE, SCALE)),
+    "G": pygame.transform.scale(pygame.image.load("sprites/Green Door.png"), (SCALE, SCALE)),
+    "F": pygame.transform.scale(pygame.image.load("sprites/Blue Door.png"), (SCALE, SCALE)),
+    "0": pygame.transform.scale(pygame.image.load("sprites/Red Switch.png"), (SCALE, SCALE)),
+    "1": pygame.transform.scale(pygame.image.load("sprites/Green Switch.png"), (SCALE, SCALE)),
+    "2": pygame.transform.scale(pygame.image.load("sprites/Blue Switch.png"), (SCALE, SCALE)),
+    "*": pygame.transform.scale(pygame.image.load("sprites/Lobby2.png"), (SCREEN_WIDTH, SCREEN_HEIGHT)),
 }

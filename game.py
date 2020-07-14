@@ -1,3 +1,5 @@
+
+
 '''
 Created on Jun 23, 2020
 
@@ -14,9 +16,15 @@ pygame.mixer.init()
 
 jumpSound = pygame.mixer.Sound("audio/jumpTile.wav")
 doorOpen = pygame.mixer.Sound("audio/doorOpen.wav")
+colorDoorOpen = pygame.mixer.Sound("audio/colorDoorOpen.wav")
 winSound = pygame.mixer.Sound("audio/youWin.wav")
 tileSwitch = pygame.mixer.Sound("audio/tileFlip.wav")
 tileBreak = pygame.mixer.Sound("audio/tileBreak.wav")
+
+def wait_for_key(key):
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_SPACE]:
+         print("test")
 
 def hasBlackTiles(map):
         for row in map:
@@ -32,18 +40,41 @@ def openDoor(map):
                 pygame.mixer.Sound.play(doorOpen)
                 return
 
+def openColorDoor(map, color):
+    for i in range(len(map)):
+        for j in range(len(map[i])):
+            if color == "RED":
+                if map[i][j] == "R":
+                    map[i][j] = "S"
+                    pygame.mixer.Sound.play(colorDoorOpen)
+            if color == "GREEN":
+                if map[i][j] == "G":
+                    map[i][j] = "S"
+                    pygame.mixer.Sound.play(colorDoorOpen)
+            if color == "BLUE":
+                if map[i][j] == "F":
+                    map[i][j] = "S"
+                    pygame.mixer.Sound.play(colorDoorOpen)
+
 class Game:
     def __init__(self, screen):
+        self.gameStarted = False
         self.screen = screen
         self.objects = []
         self.map = []
         self.game_state = GameState.NONE
-        self.lvl = 1
+        self.lvl = 0
         self.camera = [0, 0]
         
     def set_up(self, lvl):
-        pygame.mixer.music.load("audio/bgMusic.wav")
-        pygame.mixer.music.play(-1)
+        if lvl == 0:
+            pygame.mixer.music.load("audio/lobbyMusic.wav")
+            pygame.mixer.music.play(-1)
+        else:
+            pygame.mixer.music.load("audio/bgMusic.wav")
+            pygame.mixer.music.play(-1)
+        if lvl == 1:
+            self.gameStarted = True
         player = Player(1, 1)
         self.player = player
         self.objects.append(player)
@@ -65,30 +96,36 @@ class Game:
 
         if not hasBlackTiles(self.map):
             openDoor(self.map)
-    
+
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.game_state = GameState.ENDED
-            elif event.type == pygame.KEYDOWN: #all keyboard commands
-                if event.key == pygame.K_ESCAPE:
-                    self.game_state = GameState.ENDED
-                elif event.key == pygame.K_w or event.key == pygame.K_UP: #up
-                    #self.player.change_sprite("sprites/Tomb Guy Back")
-                    self.move_unit(self.player, [0, -1])
-                elif event.key == pygame.K_a or event.key == pygame.K_LEFT: #left
-                    #self.player.change_sprite("sprites/Tomb Guy Left")
-                    self.move_unit(self.player, [-1, 0])
-                elif event.key == pygame.K_s or event.key == pygame.K_DOWN: #down
-                    #self.player.change_sprite("sprites/Tomb Guy Idle")
-                    self.move_unit(self.player, [0, 1])
-                elif event.key == pygame.K_d or event.key == pygame.K_RIGHT: #right
-                    #self.player.change_sprite("sprites/Tomb Guy Right")
-                    self.move_unit(self.player, [1, 0])
-                if event.key == pygame.K_c:
-                    openDoor(self.map)
-                if event.key == pygame.K_r:
-                    self.set_up(self.lvl)
+            keys = pygame.key.get_pressed() # monitor all keystrokes
+            if keys[pygame.K_ESCAPE]:
+                self.game_state = GameState.ENDED
+            elif keys[pygame.K_w] or keys[pygame.K_UP]: #up
+                self.player.change_sprite(3)
+                self.move_unit(self.player, [0, -1])
+            elif keys[pygame.K_a] or keys[pygame.K_LEFT]: #left
+                self.player.change_sprite(2)
+                self.move_unit(self.player, [-1, 0])
+            elif keys[pygame.K_s] or keys[pygame.K_DOWN]: #down
+                self.player.change_sprite(0)
+                self.move_unit(self.player, [0, 1])
+            elif keys[pygame.K_d] or keys[pygame.K_RIGHT]: #right
+                self.player.change_sprite(1)
+                self.move_unit(self.player, [1, 0])
+            if keys[pygame.K_c]:
+                openDoor(self.map)
+            if keys[pygame.K_r] and self.gameStarted:
+                self.player.camo_player("|")
+                self.set_up(self.lvl)
+            if not self.gameStarted:
+                self.player.camo_player()
+            if not self.gameStarted and keys[pygame.K_SPACE]:
+                self.lvl += 1
+                self.set_up(self.lvl)
     
     def load_map(self, file_name):
         self.map = []
@@ -120,6 +157,12 @@ class Game:
             return
         if self.map[new_position[1]][new_position[0]] == "W":
             return
+        if self.map[new_position[1]][new_position[0]] == "R":
+            return
+        if self.map[new_position[1]][new_position[0]] == "G":
+            return
+        if self.map[new_position[1]][new_position[0]] == "F":
+            return
         if self.map[new_position[1]][new_position[0]] == "_":
             return
         if self.map[new_position[1]][new_position[0]] == "H":
@@ -137,17 +180,30 @@ class Game:
         if self.map[new_position[1]][new_position[0]] == "C":
             self.map[new_position[1]][new_position[0]] = "H"
             pygame.mixer.Sound.play(tileBreak)
+        if self.map[new_position[1]][new_position[0]] == "0":
+           openColorDoor(self.map, "RED")
+        if self.map[new_position[1]][new_position[0]] == "1":
+           openColorDoor(self.map, "GREEN")
+        if self.map[new_position[1]][new_position[0]] == "2":
+           openColorDoor(self.map, "BLUE")
         if self.map[new_position[1]][new_position[0]] == "E":
             pygame.mixer.music.stop()
             pygame.mixer.Sound.play(winSound)
             time.sleep(5)
             self.lvl += 1
+            self.player.camo_player()
             self.set_up(self.lvl)
             
         if useJump:
             new_position[0] += position_change[0] * 2
             new_position[1] += position_change[1] * 2
             if self.map[new_position[1]][new_position[0]] == "W":
+                return
+            if self.map[new_position[1]][new_position[0]] == "R":
+                return
+            if self.map[new_position[1]][new_position[0]] == "G":
+                return
+            if self.map[new_position[1]][new_position[0]] == "F":
                 return
             if self.map[new_position[1]][new_position[0]] == "D":
                 return
