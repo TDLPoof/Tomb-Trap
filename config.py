@@ -33,5 +33,6 @@ map_tile_image = {
     "0": pygame.transform.scale(pygame.image.load("sprites/Red Switch.png"), (SCALE, SCALE)),
     "1": pygame.transform.scale(pygame.image.load("sprites/Green Switch.png"), (SCALE, SCALE)),
     "2": pygame.transform.scale(pygame.image.load("sprites/Blue Switch.png"), (SCALE, SCALE)),
+    "^": pygame.transform.scale(pygame.image.load("sprites/Lobby1.png"), (SCREEN_WIDTH, SCREEN_HEIGHT)),
     "*": pygame.transform.scale(pygame.image.load("sprites/Lobby2.png"), (SCREEN_WIDTH, SCREEN_HEIGHT)),
 }

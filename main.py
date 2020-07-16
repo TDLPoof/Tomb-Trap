@@ -14,13 +14,16 @@ from game import Game
 def main(width = 2000, height = 2000, frameRate = 60):
     pygame.init()
     screen = pygame.display.set_mode((width, height))
-    pygame.display.set_caption("Puzzle Game")
+    pygame.display.set_caption("Tomb Trap")
     game = Game(screen)
     game.set_up(0)
     
     clock = pygame.time.Clock()
     #main loop
     while game.game_state == GameState.RUNNING:
+        #if game.gamePaused:
+        #    screen.blit(pygame.transform.scale(pygame.image.load("sprites/Pause.png"), (600, 600)), (0, 0))
+        #    print("did something")
         clock.tick(frameRate)
         game.update()
         pygame.display.flip()

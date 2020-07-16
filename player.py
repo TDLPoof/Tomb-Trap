@@ -8,7 +8,6 @@ import config
 
 class Player:
     def __init__(self, xPos, yPos):
-        print("Player created")
         self.position = [xPos, yPos]
         self.image = pygame.image.load("sprites/Tomb Guy Idle.png")
         self.image = pygame.transform.scale(self.image, (config.SCALE, config.SCALE))

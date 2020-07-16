@@ -21,11 +21,6 @@ winSound = pygame.mixer.Sound("audio/youWin.wav")
 tileSwitch = pygame.mixer.Sound("audio/tileFlip.wav")
 tileBreak = pygame.mixer.Sound("audio/tileBreak.wav")
 
-def wait_for_key(key):
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_SPACE]:
-         print("test")
-
 def hasBlackTiles(map):
         for row in map:
             if row.count("B") != 0:
@@ -59,6 +54,7 @@ def openColorDoor(map, color):
 class Game:
     def __init__(self, screen):
         self.gameStarted = False
+        self.gamePaused = False
         self.screen = screen
         self.objects = []
         self.map = []
@@ -98,32 +94,56 @@ class Game:
             openDoor(self.map)
 
     def handle_events(self):
+        if self.gamePaused:
+            self.player.camo_player()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.game_state = GameState.ENDED
+            leftClick = pygame.mouse.get_pressed()[0]
+            mousePos = pygame.mouse.get_pos() # monitor mouseX and mouseY
+            mouseX = mousePos[0]
+            mouseY = mousePos[1]
             keys = pygame.key.get_pressed() # monitor all keystrokes
-            if keys[pygame.K_ESCAPE]:
-                self.game_state = GameState.ENDED
-            elif keys[pygame.K_w] or keys[pygame.K_UP]: #up
+            if self.gameStarted and (keys[pygame.K_ESCAPE] and not self.gamePaused):
+                self.gamePaused = True
+                pygame.mixer.music.stop()
+                pygame.mixer.music.load("audio/pauseMusic.wav")
+                pygame.mixer.music.play(-1)
+            elif self.gameStarted and (keys[pygame.K_ESCAPE] and self.gamePaused):
+                self.gamePaused = False
+                self.player.change_sprite(0)
+                pygame.mixer.music.stop()
+                pygame.mixer.music.load("audio/bgMusic.wav")
+                pygame.mixer.music.play(-1)
+            elif not self.gamePaused and (keys[pygame.K_w] or keys[pygame.K_UP]): #up
                 self.player.change_sprite(3)
                 self.move_unit(self.player, [0, -1])
-            elif keys[pygame.K_a] or keys[pygame.K_LEFT]: #left
+            elif not self.gamePaused and (keys[pygame.K_a] or keys[pygame.K_LEFT]): #left
                 self.player.change_sprite(2)
                 self.move_unit(self.player, [-1, 0])
-            elif keys[pygame.K_s] or keys[pygame.K_DOWN]: #down
+            elif not self.gamePaused and (keys[pygame.K_s] or keys[pygame.K_DOWN]): #down
                 self.player.change_sprite(0)
                 self.move_unit(self.player, [0, 1])
-            elif keys[pygame.K_d] or keys[pygame.K_RIGHT]: #right
+            elif not self.gamePaused and (keys[pygame.K_d] or keys[pygame.K_RIGHT]): #right
                 self.player.change_sprite(1)
                 self.move_unit(self.player, [1, 0])
-            if keys[pygame.K_c]:
+            if not self.gamePaused and keys[pygame.K_c]:
                 openDoor(self.map)
-            if keys[pygame.K_r] and self.gameStarted:
-                self.player.camo_player("|")
+            xInBounds = (mouseX > 131 and mouseX < 488)
+            yInReset = (mouseY > 188 and mouseY < 291)
+            yInExit = (mouseY > 347 and mouseY < 450)
+            if self.gamePaused and ((xInBounds and yInReset and leftClick == 1) or keys[pygame.K_r]):
+                self.gamePaused = False
+                self.player.camo_player()
                 self.set_up(self.lvl)
+            if self.gamePaused and ((xInBounds and yInExit and leftClick == 1) or keys[pygame.K_q]):
+                self.game_state = GameState.ENDED
             if not self.gameStarted:
                 self.player.camo_player()
             if not self.gameStarted and keys[pygame.K_SPACE]:
+                pygame.mixer.Sound.play(doorOpen)
+                pygame.mixer.music.stop()
+                time.sleep(0.5)
                 self.lvl += 1
                 self.set_up(self.lvl)
     
@@ -137,6 +157,11 @@ class Game:
                 self.map.append(tiles)
     
     def render_map(self, screen):
+        if self.gamePaused:
+            pauseImg = pygame.transform.scale(pygame.image.load("sprites/Pause.png"), (600, 600))
+            screen.blit(pauseImg, (0, 0))
+            return
+
         self.determine_camera()
         y_pos = 0
         for line in self.map:
