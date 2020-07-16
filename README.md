@@ -20,6 +20,4 @@ C = Cracked Tile
 
 H = Hole (pretty much wall)
 
-
-
-DO NOT PRESS C
+Make sure to create maps as rectangles! (Use the Black Tile ONLY to fill empty spaces)
