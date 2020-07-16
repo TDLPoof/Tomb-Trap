@@ -1,0 +1,17 @@
+W S W _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+W S W _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+W S W _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+W S W W W W W W W W W W W W W W W _ _
+W S S S S S S C S S C S S C S S W _ _
+W W W W W W W W W W W W W W W S W _ _
+_ _ _ _ _ _ _ _ _ _ _ _ W W W S W W W
+_ _ _ _ _ _ _ _ _ _ _ _ W S S S S S W
+_ _ _ _ _ _ _ _ _ _ _ _ W S S S S S W
+_ _ _ _ _ _ _ _ _ _ _ _ W S S D S S W
+_ _ _ _ _ _ _ _ _ _ _ _ W S S S S S W
+_ _ _ _ _ _ _ _ _ _ _ _ W S S S S S W
+_ _ _ _ _ _ _ _ _ _ _ _ W W W S W W W
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ W S W _ _
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ W S W _ _
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ W S W _ _
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ W E W _ _ 
