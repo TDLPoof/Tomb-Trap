@@ -1,0 +1,9 @@
+S S S S S W - - - - - - - - - - - W W W W W W W W W W W W W W W W W
+W W W W S W - - - - - - - - W W W W S S S S S S S W S W B W S S D W
+W 0 J J S W W W W W W W W W W S S S S S S S S S S C B G S F S S S W
+W W W W R S C S S S S S S S S S S S S S S S S S S W W W W W W W W W
+W S S W S W W W W W W W W W W W W W W W W W W S W W - - - - - - - -
+W S S S J W S S B J W - - - - - - - - - - - W S W - - - - - - - - -
+W S S S S W W W S S W - - - - - - - - - - - W S W - - - - - - - - -
+W W W W S W - W W W W - - - - - - - - - - - W B W - - - - - - - - -
+- - - W S W - - - - - - - - - - - - - - - - W W W - - - - - - - - -
