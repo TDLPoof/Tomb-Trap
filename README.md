@@ -20,4 +20,16 @@ C = Cracked Tile
 
 H = Hole (pretty much wall)
 
+R = Red Door
+
+G = Green Door
+
+F = Blue Door
+
+0 = Red Switch
+
+1 = Green Switch
+
+2 = Blue Switch
+
 Make sure to create maps as rectangles! (Use the Black Tile ONLY to fill empty spaces)
