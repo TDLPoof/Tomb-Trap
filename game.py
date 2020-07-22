@@ -1,5 +1,4 @@
-
-
+	
 '''
 Created on Jun 23, 2020
 
@@ -22,9 +21,9 @@ tileSwitch = pygame.mixer.Sound("audio/tileFlip.wav")
 tileBreak = pygame.mixer.Sound("audio/tileBreak.wav")
 diamondGet = pygame.mixer.Sound("audio/diamondGet.wav")
 
-def hasBlackTiles(map):
+def hasTile(tile, map):
         for row in map:
-            if row.count("B") != 0:
+            if row.count(tile) != 0:
                 return True
         return False
 
@@ -67,6 +66,9 @@ class Game:
         if lvl == 0:
             pygame.mixer.music.load("audio/lobbyMusic.wav")
             pygame.mixer.music.play(-1)
+        elif lvl == 8:
+            pygame.mixer.music.load("audio/victoryMusic.wav")
+            pygame.mixer.music.play(-1)
         else:
             pygame.mixer.music.load("audio/bgMusic.wav")
             pygame.mixer.music.play(-1)
@@ -91,8 +93,12 @@ class Game:
         for object in self.objects:
             object.render(self.screen, self.camera)
 
-        if not hasBlackTiles(self.map):
-            openDoor(self.map)
+        if self.lvl == 5:
+            if not hasTile("K", self.map):
+                openDoor(self.map)
+        elif self.lvl != 5:
+            if not hasTile("B", self.map):
+                openDoor(self.map)
 
     def handle_events(self):
         if self.gamePaused:
@@ -131,6 +137,7 @@ class Game:
             if not self.gamePaused and keys[pygame.K_z]:
                 self.player.camo_player()
                 self.set_up(5)
+                self.lvl = 5
             if not self.gamePaused and keys[pygame.K_c]:
                 openDoor(self.map)
                 openColorDoor(self.map, "RED")
@@ -220,7 +227,6 @@ class Game:
            openColorDoor(self.map, "BLUE")
         if self.map[new_position[1]][new_position[0]] == "K":
             pygame.mixer.music.stop()
-            doorOpen(self.map)
             pygame.mixer.Sound.play(diamondGet)
             time.sleep(9)
             self.map[new_position[1]][new_position[0]] = "S"
@@ -238,6 +244,10 @@ class Game:
         if useJump:
             new_position[0] += position_change[0] * 2
             new_position[1] += position_change[1] * 2
+            if new_position[0] < 0 or new_position[0] > (len(self.map[0]) - 1):
+                return
+            if new_position[1] < 0 or new_position[1] > (len(self.map) - 1):
+                return
             if self.map[new_position[1]][new_position[0]] == "W":
                 return
             if self.map[new_position[1]][new_position[0]] == "R":
@@ -248,10 +258,38 @@ class Game:
                 return
             if self.map[new_position[1]][new_position[0]] == "D":
                 return
+            if self.map[new_position[1]][new_position[0]] == "B":
+                pygame.mixer.Sound.play(tileSwitch)
+                self.map[new_position[1]][new_position[0]] = "X" #swap b for w
+            elif self.map[new_position[1]][new_position[0]] == "X":
+                pygame.mixer.Sound.play(tileSwitch)
+                self.map[new_position[1]][new_position[0]] = "B" #swap w for b
+            if self.map[new_position[1]][new_position[0]] == "H":
+                return
             if self.map[new_position[1]][new_position[0]] == "_" or self.map[new_position[1]][new_position[0]] == "-":
                 return
-            if new_position[0] < 0 or new_position[1] < 0:
-                return
+            if self.map[new_position[1]][new_position[0]] == "0":
+               openColorDoor(self.map, "RED")
+            if self.map[new_position[1]][new_position[0]] == "1":
+               openColorDoor(self.map, "GREEN")
+            if self.map[new_position[1]][new_position[0]] == "2":
+               openColorDoor(self.map, "BLUE")
+            if self.map[new_position[1]][new_position[0]] == "K":
+                pygame.mixer.music.stop()
+                pygame.mixer.Sound.play(diamondGet)
+                time.sleep(9)
+                self.map[new_position[1]][new_position[0]] = "S"
+                pygame.mixer.music.stop()
+                pygame.mixer.music.load("audio/bgMusic.wav")
+                pygame.mixer.music.play(-1)
+            if self.map[new_position[1]][new_position[0]] == "E":
+                pygame.mixer.music.stop()
+                pygame.mixer.Sound.play(winSound)
+                time.sleep(5)
+                self.lvl += 1
+                self.player.camo_player()
+                self.set_up(self.lvl)
+
             pygame.mixer.Sound.play(jumpSound)
         unit.update_position(new_position)
     
